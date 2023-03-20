@@ -49,7 +49,14 @@ public class Joystick {
     }
 
     public void update() {
+        updateInnerCirclePosition();
     }
+
+    private void updateInnerCirclePosition() {
+        innerCircleCenterPositionX = (int) (outerCircleCenterPositionX + actuatorX*outerCircleRad);
+        innerCircleCenterPositionY = (int) (outerCircleCenterPositionY + actuatorY*outerCircleRad);
+    }
+
 
     public boolean isPressed(double touchPositionX, double touchPositionY) {
         joystickCenterToTouchDistance = Math.sqrt(
