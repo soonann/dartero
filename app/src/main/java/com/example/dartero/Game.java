@@ -3,19 +3,21 @@ package com.example.dartero;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final Player player;
     private final Joystick joystick;
     private GameLoop gameLoop;
+
+    private ArrayList<Mob> mobs = new ArrayList<>();
     public Game(Context context) {
         super(context);
         SurfaceHolder surfaceHolder = getHolder();
@@ -23,7 +25,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         gameLoop = new GameLoop(this, surfaceHolder);
         joystick = new Joystick(getContext(), getResources().getDisplayMetrics().widthPixels/2, getResources().getDisplayMetrics().heightPixels/6 * 5, 70, 40);
-        player = new Player(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, 70, getResources().getDisplayMetrics().widthPixels,getResources().getDisplayMetrics().heightPixels);
+        player = new Player(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, 70, getResources().getDisplayMetrics().widthPixels,getResources().getDisplayMetrics().heightPixels, joystick);
+        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, 70, getResources().getDisplayMetrics().widthPixels,getResources().getDisplayMetrics().heightPixels, player));
+        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/4,  getResources().getDisplayMetrics().heightPixels/6 * 2, 70, getResources().getDisplayMetrics().widthPixels,getResources().getDisplayMetrics().heightPixels, player));
 
         setFocusable(true);
     }
@@ -50,6 +54,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         drawFPS(canvas);
         player.draw(canvas);
         joystick.draw(canvas);
+        for (Mob mob: mobs) {
+            mob.draw(canvas);
+        }
     }
 
     public void drawUPS(Canvas canvas) {
@@ -74,7 +81,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void update() {
         //Update game state
         joystick.update();
-        player.update(joystick);
+        player.update();
+        for (Mob mob: mobs) {
+            mob.update();
+        }
     }
 
     @Override

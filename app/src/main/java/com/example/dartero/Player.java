@@ -6,28 +6,24 @@ import android.graphics.Paint;
 
 import androidx.core.content.ContextCompat;
 
-public class Player {
+public class Player extends GameObject{
 
 
-    private static final double SPEED_PIXEL_PER_SECOND = 1000;
+    public static final double SPEED_PIXEL_PER_SECOND = 1000;
     private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / GameLoop.MAX_UPS;
 
-    private double maxX;
-    private double maxY;
 
-    private double positionX;
-    private double positionY;
+
     private double radius;
     private Paint paint;
-    private double velocityX;
-    private double velocityY;
 
-    public Player(Context context, double positionX, double positionY, double radius, double maxX, double maxY) {
-        this.positionX = positionX;
-        this.positionY = positionY;
+    private final Joystick joystick;
+
+
+    public Player(Context context, double positionX, double positionY, double radius, double maxX, double maxY, Joystick joystick) {
+        super(positionX,positionY,maxX,maxY);
         this.radius = radius;
-        this.maxX = maxX;
-        this.maxY = maxY;
+        this.joystick = joystick;
         paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.player));
     }
@@ -36,7 +32,7 @@ public class Player {
         canvas.drawCircle((float) positionX, (float) positionY, (float) radius, paint);
     }
 
-    public void update(Joystick joystick) {
+    public void update() {
         velocityX = joystick.getActuatorX()*MAX_SPEED;
         velocityY = joystick.getActuatorY()*MAX_SPEED;
 
