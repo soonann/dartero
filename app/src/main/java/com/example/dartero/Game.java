@@ -23,7 +23,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         gameLoop = new GameLoop(this, surfaceHolder);
         joystick = new Joystick(getContext(), getResources().getDisplayMetrics().widthPixels/2, getResources().getDisplayMetrics().heightPixels/6 * 5, 70, 40);
-        player = new Player(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, 70);
+        player = new Player(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, 70, getResources().getDisplayMetrics().widthPixels,getResources().getDisplayMetrics().heightPixels);
 
         setFocusable(true);
     }
@@ -74,7 +74,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void update() {
         //Update game state
         joystick.update();
-        player.update();
+        player.update(joystick);
     }
 
     @Override

@@ -92,4 +92,12 @@ public class Joystick {
         actuatorX = 0;
         actuatorY = 0;
     }
+
+    public double getActuatorX() {
+        return actuatorX;
+    }
+
+    public double getActuatorY() {
+        return actuatorY;
+    }
 }
