@@ -11,13 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final Player player;
     private final Joystick joystick;
     private GameLoop gameLoop;
 
-    private ArrayList<Mob> mobs = new ArrayList<>();
+    private List<Mob> mobs = new ArrayList<>();
+    private List<Dart> darts = new ArrayList<>();
+
     public Game(Context context) {
         super(context);
         SurfaceHolder surfaceHolder = getHolder();
@@ -25,10 +29,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         gameLoop = new GameLoop(this, surfaceHolder);
         joystick = new Joystick(getContext(), getResources().getDisplayMetrics().widthPixels/2, getResources().getDisplayMetrics().heightPixels/6 * 5, 70, 40);
-        player = new Player(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, 70, getResources().getDisplayMetrics().widthPixels,getResources().getDisplayMetrics().heightPixels, joystick);
-        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, 70, getResources().getDisplayMetrics().widthPixels,getResources().getDisplayMetrics().heightPixels, player));
-        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/4,  getResources().getDisplayMetrics().heightPixels/6 * 2, 70, getResources().getDisplayMetrics().widthPixels,getResources().getDisplayMetrics().heightPixels, player));
-
+        GameObject.maxX = getResources().getDisplayMetrics().widthPixels;
+        GameObject.maxY = getResources().getDisplayMetrics().heightPixels;
+        player = new Player(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, joystick);
+        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4,  player));
+        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/4,  getResources().getDisplayMetrics().heightPixels/6 * 2, player));
         setFocusable(true);
     }
 
@@ -57,6 +62,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         for (Mob mob: mobs) {
             mob.draw(canvas);
         }
+        for (Dart dart: darts) {
+            dart.draw(canvas);
+        }
     }
 
     public void drawUPS(Canvas canvas) {
@@ -82,8 +90,45 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         //Update game state
         joystick.update();
         player.update();
+
+        if (Mob.readyToSpawn()) {
+            mobs.add(new Mob(getContext(),player));
+        }
+
+        // Update the state of each mob
         for (Mob mob: mobs) {
             mob.update();
+        }
+
+        Dart.player=player;
+        Dart.mobs=mobs;
+
+        if (Dart.readyToShoot()) {
+            darts.add(new Dart(getContext()));
+        }
+
+        for (Dart dart: darts) {
+            dart.update();
+        }
+
+
+        //Iterate through mobs and check for collision
+        Iterator<Mob> iteratorMob = mobs.iterator();
+        while (iteratorMob.hasNext()) {
+            Mob mob = iteratorMob.next();
+            if (GameObject.isColliding(mob, player)) {
+                // if there is collision remove current enemy
+                iteratorMob.remove();
+            }
+        }
+
+        Iterator<Dart> iteratorDart = darts.iterator();
+        while (iteratorDart.hasNext()) {
+            Dart dart = iteratorDart.next();
+            if(GameObject.isColliding(dart,dart.getNearestMob())) {
+                iteratorDart.remove();
+                mobs.remove(dart.getNearestMob());
+            }
         }
     }
 

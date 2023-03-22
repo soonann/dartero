@@ -7,23 +7,48 @@ import android.graphics.Paint;
 import androidx.core.content.ContextCompat;
 
 public class Mob extends GameObject{
-    private static double SPEED_MULTIPLIER = 0.2;
+    private static double SPEED_MULTIPLIER = 0.6;
     private static final double SPEED_PIXEL_PER_SECOND = Player.SPEED_PIXEL_PER_SECOND * SPEED_MULTIPLIER;
     private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / GameLoop.MAX_UPS;
+    private static final double SPAWNS_PER_MINUTE = 20;
+    private static final double SPAWNS_PER_SECOND = SPAWNS_PER_MINUTE/60.0;
+    private static final double UPDATES_PER_SPAWN = GameLoop.MAX_UPS/SPAWNS_PER_SECOND;
+    private static double updatesUntilNextSpawn = UPDATES_PER_SPAWN;
 
 
 
-    private double radius;
+    public static final double radius = 50;
     private Paint paint;
 
     private Player player;
 
-    public Mob(Context context, double positionX, double positionY, double radius, double maxX, double maxY, Player player) {
-        super(positionX,positionY,maxX,maxY);
-        this.radius = radius;
+    public Mob(Context context, double positionX, double positionY, Player player) {
+        super(positionX,positionY,radius);
+
         this.player = player;
         paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.mob));
+    }
+
+    public Mob(Context context, Player player) {
+        super(Math.random()*1000, Math.random()*1000,radius);
+        this.player = player;
+        paint = new Paint();
+        paint.setColor(ContextCompat.getColor(context, R.color.mob));
+    }
+
+    /**
+     * ready to spawn checks if a mob should spawn, according to spawns per minute
+     * @return
+     */
+    public static boolean readyToSpawn() {
+        if (updatesUntilNextSpawn <= 0) {
+            updatesUntilNextSpawn += UPDATES_PER_SPAWN;
+            return true;
+        } else {
+            updatesUntilNextSpawn--;
+            return false;
+        }
     }
 
 

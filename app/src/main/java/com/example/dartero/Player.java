@@ -14,18 +14,19 @@ public class Player extends GameObject{
 
 
 
-    private double radius;
+    public static final double radius = 70;
     private Paint paint;
+    private PlayerState playerState;
 
     private final Joystick joystick;
 
 
-    public Player(Context context, double positionX, double positionY, double radius, double maxX, double maxY, Joystick joystick) {
-        super(positionX,positionY,maxX,maxY);
-        this.radius = radius;
+    public Player(Context context, double positionX, double positionY, Joystick joystick) {
+        super(positionX,positionY,radius);
         this.joystick = joystick;
         paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.player));
+        this.playerState = new PlayerState(this);
     }
 
     public void draw(Canvas canvas) {
@@ -49,5 +50,11 @@ public class Player extends GameObject{
         } else if (positionY < 0) {
             positionY = 0;
         }
+
+        playerState.update();
+    }
+
+    public PlayerState getPlayerState() {
+        return playerState;
     }
 }

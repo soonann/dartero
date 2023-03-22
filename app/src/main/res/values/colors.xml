@@ -10,6 +10,8 @@
     <color name="player">#ED4C4C</color>
     <color name="mob">#4CAF50</color>
     <color name="joystick">#03A9F4</color>
+    <color name="dart">#FF5722</color>
+
 
 
 </resources>

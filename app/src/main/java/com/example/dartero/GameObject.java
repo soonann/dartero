@@ -7,16 +7,29 @@ public abstract class GameObject {
     protected double positionY;
     protected double velocityX;
     protected double velocityY;
-    protected double maxX;
-    protected double maxY;
+    public static double maxX;
+    public static double maxY;
 
-    public GameObject(double positionX, double positionY, double maxX, double maxY) {
+    protected double radius;
+
+    public GameObject(double positionX, double positionY, double radius) {
         this.positionX = positionX;
         this.positionY = positionY;
-        this.maxX = maxX;
-        this.maxY = maxY;
+        this.radius = radius;
     }
-    public double getDistBetweenGameObjects(GameObject go1, GameObject go2) {
+
+    public static boolean isColliding(GameObject go1, GameObject go2) {
+        if (getDistBetweenGameObjects(go1, go2) <= go1.getRadius() + go2.getRadius()) {
+            return true;
+        }
+        return false;
+    }
+
+    private double getRadius() {
+        return radius;
+    }
+
+    public static double getDistBetweenGameObjects(GameObject go1, GameObject go2) {
         return Math.sqrt(Math.pow(go1.positionX-go2.positionX,2) + Math.pow(go1.positionY-go2.positionY, 2));
     }
 
