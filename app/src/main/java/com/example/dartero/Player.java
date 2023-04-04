@@ -8,17 +8,17 @@ import androidx.core.content.ContextCompat;
 
 public class Player extends GameObject{
 
-
     public static final double SPEED_PIXEL_PER_SECOND = 1000;
+    public static final int MAX_HEALTH_POINTS = 10;
     private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / GameLoop.MAX_UPS;
-
-
 
     public static final double radius = 70;
     private Paint paint;
     private PlayerState playerState;
 
     private final Joystick joystick;
+    private HealthBar healthBar;
+    private int healthPoints;
 
 
     public Player(Context context, double positionX, double positionY, Joystick joystick) {
@@ -27,10 +27,13 @@ public class Player extends GameObject{
         paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.player));
         this.playerState = new PlayerState(this);
+        this.healthBar = new HealthBar(context,this);
+        this.healthPoints = MAX_HEALTH_POINTS;
     }
 
     public void draw(Canvas canvas) {
         canvas.drawCircle((float) positionX, (float) positionY, (float) radius, paint);
+        healthBar.draw(canvas);
     }
 
     public void update() {
@@ -56,5 +59,13 @@ public class Player extends GameObject{
 
     public PlayerState getPlayerState() {
         return playerState;
+    }
+
+    public int getHealthPoints() {
+        return healthPoints;
+    }
+
+    public void setHealthPoints(int healthPoints) {
+        this.healthPoints = healthPoints;
     }
 }

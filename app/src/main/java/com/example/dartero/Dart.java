@@ -61,7 +61,12 @@ public class Dart extends GameObject{
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawCircle((float) positionX, (float) positionY, (float) radius, paint);
+        float left = (float) positionX;
+        float top = (float) positionY;
+        float right = (float) positionX + 20;
+        float bottom = (float) positionY + 30;
+
+        canvas.drawRect(left, top, right, bottom, paint);
     }
 
     @Override

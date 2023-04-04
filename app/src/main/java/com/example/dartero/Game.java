@@ -119,6 +119,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             if (GameObject.isColliding(mob, player)) {
                 // if there is collision remove current enemy
                 iteratorMob.remove();
+                player.setHealthPoints(player.getHealthPoints() - 1);
             }
         }
 
