@@ -66,6 +66,8 @@ public class Player extends GameObject{
     }
 
     public void setHealthPoints(int healthPoints) {
-        this.healthPoints = healthPoints;
+        if (healthPoints >= 0) {
+            this.healthPoints = healthPoints;
+        }
     }
 }
