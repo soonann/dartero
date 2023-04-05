@@ -15,8 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
-    private final Player player;
-    private final Joystick joystick;
+    private Joystick joystick;
+    private Player player;
     private GameLoop gameLoop;
 
     private List<Mob> mobs = new ArrayList<>();
@@ -29,15 +29,30 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         surfaceHolder.addCallback(this);
 
         gameOver = new GameOver(getContext());
-
         gameLoop = new GameLoop(this, surfaceHolder);
-        joystick = new Joystick(getContext(), getResources().getDisplayMetrics().widthPixels/2, getResources().getDisplayMetrics().heightPixels/6 * 5, 70, 40);
+
+        initGame();
+
+        setFocusable(true);
+    }
+
+    /**
+     * Initializes the game display and settings
+     */
+    private void initGame() {
         GameObject.maxX = getResources().getDisplayMetrics().widthPixels;
         GameObject.maxY = getResources().getDisplayMetrics().heightPixels;
+        joystick = new Joystick(getContext(), getResources().getDisplayMetrics().widthPixels/2, getResources().getDisplayMetrics().heightPixels/6 * 5, 70, 40);
         player = new Player(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, joystick);
-        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4,  player));
+//        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4,  player));
         mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/4,  getResources().getDisplayMetrics().heightPixels/6 * 2, player));
-        setFocusable(true);
+    }
+
+    /**
+     * Allow reset of game when gameover
+     */
+    public void resetGame() {
+        initGame();
     }
 
     @Override
@@ -149,6 +164,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (player.getHealthPoints() <= 0 && event.getActionMasked() == MotionEvent.ACTION_UP) {
+            if (gameOver.handleTouchEvent(event.getX(), event.getY())) {
+                resetGame();
+            }
+            return true;
+        }
+
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 if (joystick.isPressed((double) event.getX(), (double) event.getY())) {
@@ -169,8 +191,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 joystick.resetActuator();
                 return true;
         }
-
         return super.onTouchEvent(event);
-
     }
 }

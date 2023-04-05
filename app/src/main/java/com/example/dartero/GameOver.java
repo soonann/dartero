@@ -10,12 +10,10 @@ import androidx.core.content.ContextCompat;
  */
 public class GameOver {
 
-    private Context context;
     private Paint wordPaint, bgPaint;
+    private Button button;
 
     public GameOver(Context context) {
-        this.context = context;
-
         this.wordPaint = new Paint();
         int wordColor = ContextCompat.getColor(context, R.color.gameOver);
         wordPaint.setColor(wordColor);
@@ -25,6 +23,20 @@ public class GameOver {
         int bgColor = ContextCompat.getColor(context, R.color.white);
         bgPaint.setColor(bgColor);
         bgPaint.setAlpha(128); // opacity of the background
+
+        int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+        int screenHeight = context.getResources().getDisplayMetrics().heightPixels;
+        int buttonWidth = 400;
+        int buttonHeight = 150;
+
+        this.button = new Button(
+                context,
+                (screenWidth - buttonWidth) / 2,
+                screenHeight / 2,
+                (screenWidth + buttonWidth) / 2,
+                screenHeight / 2 + buttonHeight,
+                "RESTART"
+        );
     }
 
     public void draw(Canvas canvas) {
@@ -38,7 +50,17 @@ public class GameOver {
         // GameOver words
         String text = "Game Over";
         float x = 350;
-        float y = 1500;
+        float y = 1400;
         canvas.drawText(text, x, y, wordPaint);
+
+        button.draw(canvas);
+    }
+
+    public boolean handleTouchEvent(float x, float y) {
+        if (button.isPressed(x, y)) {
+            // Handle the button press
+            return true;
+        }
+        return false;
     }
 }

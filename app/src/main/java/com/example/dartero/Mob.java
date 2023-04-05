@@ -22,6 +22,7 @@ public class Mob extends GameObject{
 
     private Player player;
 
+    // TODO: first mob spawn bug; spawn further
     public Mob(Context context, double positionX, double positionY, Player player) {
         super(positionX,positionY,radius);
 
