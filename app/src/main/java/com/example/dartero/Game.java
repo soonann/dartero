@@ -21,11 +21,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private List<Mob> mobs = new ArrayList<>();
     private List<Dart> darts = new ArrayList<>();
+    private GameOver gameOver;
 
     public Game(Context context) {
         super(context);
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
+
+        gameOver = new GameOver(getContext());
 
         gameLoop = new GameLoop(this, surfaceHolder);
         joystick = new Joystick(getContext(), getResources().getDisplayMetrics().widthPixels/2, getResources().getDisplayMetrics().heightPixels/6 * 5, 70, 40);
@@ -65,6 +68,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         for (Dart dart: darts) {
             dart.draw(canvas);
         }
+
+        // game over if player is dead
+        if (player.getHealthPoints() <= 0) {
+            gameOver.draw(canvas);
+        }
     }
 
     public void drawUPS(Canvas canvas) {
@@ -87,6 +95,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update() {
+        // Stop updating game when player is dead
+        // TODO: restart game
+        if (player.getHealthPoints() <= 0) {
+            return ;
+        }
+
         //Update game state
         joystick.update();
         player.update();

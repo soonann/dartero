@@ -13,5 +13,6 @@
     <color name="dart">#FF5722</color>
     <color name="bar">#A0A0A0</color>
     <color name="health">#00FF00</color>
+    <color name="gameOver">#F44336</color>
 
 </resources>
