@@ -3,6 +3,7 @@ package com.example.dartero;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -10,11 +11,20 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.example.dartero.objects.Dart;
+import com.example.dartero.objects.GameObject;
+import com.example.dartero.objects.Mob;
+import com.example.dartero.objects.Player;
+import com.example.dartero.panel.GameOver;
+import com.example.dartero.panel.Joystick;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
+    private MediaPlayer shootSound;
+
     private Joystick joystick;
     private Player player;
     private GameLoop gameLoop;
@@ -32,6 +42,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop = new GameLoop(this, surfaceHolder);
 
         initGame();
+
+        // Initialize shoot sound
+        shootSound = MediaPlayer.create(context, R.raw.pew);
+        shootSound.setLooping(false);
 
         setFocusable(true);
     }
@@ -62,7 +76,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-
     }
 
     @Override
@@ -111,7 +124,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         // Stop updating game when player is dead
-        // TODO: restart game
         if (player.getHealthPoints() <= 0) {
             return ;
         }
@@ -155,6 +167,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Iterator<Dart> iteratorDart = darts.iterator();
         while (iteratorDart.hasNext()) {
             Dart dart = iteratorDart.next();
+            shootSound.start();
             if(GameObject.isColliding(dart,dart.getNearestMob())) {
                 iteratorDart.remove();
                 mobs.remove(dart.getNearestMob());
@@ -164,6 +177,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        // Restart button for restarting the game
         if (player.getHealthPoints() <= 0 && event.getActionMasked() == MotionEvent.ACTION_UP) {
             if (gameOver.handleTouchEvent(event.getX(), event.getY())) {
                 resetGame();

@@ -1,4 +1,4 @@
-package com.example.dartero;
+package com.example.dartero.objects;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,7 +6,12 @@ import android.graphics.Paint;
 
 import androidx.core.content.ContextCompat;
 
-public class Player extends GameObject{
+import com.example.dartero.GameLoop;
+import com.example.dartero.panel.HealthBar;
+import com.example.dartero.panel.Joystick;
+import com.example.dartero.R;
+
+public class Player extends GameObject {
 
     public static final double SPEED_PIXEL_PER_SECOND = 1000;
     public static final int MAX_HEALTH_POINTS = 5;

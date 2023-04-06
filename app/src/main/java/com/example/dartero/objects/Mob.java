@@ -1,4 +1,4 @@
-package com.example.dartero;
+package com.example.dartero.objects;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,7 +6,10 @@ import android.graphics.Paint;
 
 import androidx.core.content.ContextCompat;
 
-public class Mob extends GameObject{
+import com.example.dartero.GameLoop;
+import com.example.dartero.R;
+
+public class Mob extends GameObject {
     private static double SPEED_MULTIPLIER = 0.6;
     private static final double SPEED_PIXEL_PER_SECOND = Player.SPEED_PIXEL_PER_SECOND * SPEED_MULTIPLIER;
     private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / GameLoop.MAX_UPS;

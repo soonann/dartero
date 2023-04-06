@@ -1,12 +1,12 @@
-package com.example.dartero;
+package com.example.dartero.objects;
 
 import android.graphics.Canvas;
 
 public abstract class GameObject {
-    protected double positionX;
-    protected double positionY;
-    protected double velocityX;
-    protected double velocityY;
+    public double positionX;
+    public double positionY;
+    public double velocityX;
+    public double velocityY;
     public static double maxX;
     public static double maxY;
 

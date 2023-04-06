@@ -1,4 +1,6 @@
-package com.example.dartero;
+package com.example.dartero.objects;
+
+import com.example.dartero.objects.Player;
 
 public class PlayerState {
     public enum State {

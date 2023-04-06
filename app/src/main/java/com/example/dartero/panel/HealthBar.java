@@ -1,10 +1,13 @@
-package com.example.dartero;
+package com.example.dartero.panel;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import androidx.core.content.ContextCompat;
+
+import com.example.dartero.R;
+import com.example.dartero.objects.Player;
 
 /**
  * HealthBar display on screen

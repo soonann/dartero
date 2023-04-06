@@ -1,4 +1,4 @@
-package com.example.dartero;
+package com.example.dartero.objects;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 import androidx.core.content.ContextCompat;
+
+import com.example.dartero.R;
 
 public class Button {
     private Rect rect;
