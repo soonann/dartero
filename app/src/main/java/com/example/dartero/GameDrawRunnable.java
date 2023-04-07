@@ -3,6 +3,11 @@ package com.example.dartero;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
+/**
+ * GameDrawRunnable is a class responsible for rendering game on the screen
+ * to ensure smooth and consistent rendering experience.
+ * This class also calculates the FPS on screen.
+ */
 public class GameDrawRunnable implements Runnable {
     private Game game;
     private SurfaceHolder surfaceHolder;
@@ -14,21 +19,35 @@ public class GameDrawRunnable implements Runnable {
     private long startTime;
     private long elapsedTime;
 
+    /**
+     * Constructs a new GameDrawRunnable object
+     * @param game  The Game object that will be rendered
+     * @param surfaceHolder The SurfaceHolder used for rendering the game
+     */
     public GameDrawRunnable(Game game, SurfaceHolder surfaceHolder) {
         this.game = game;
         this.surfaceHolder = surfaceHolder;
     }
 
+    /**
+     * Start the rendering thread
+     */
     public void start() {
         running = true;
         thread = new Thread(this);
         thread.start();
     }
 
+    /**
+     * Stop the rendering thread
+     */
     public void stop() {
         running = false;
     }
 
+    /**
+     * Wait for rendering thread to finish
+     */
     public void join() {
         try {
             thread.join();
@@ -37,10 +56,18 @@ public class GameDrawRunnable implements Runnable {
         }
     }
 
+    /**
+     * Returns the current average frames per second
+     * @return The average FPS as a double
+     */
     public double getAverageFPS() {
         return averageFPS;
     }
 
+    /**
+     * Main rendering loop.
+     * Handles rendering of the game, calculating average FPS and display FPS.
+     */
     @Override
     public void run() {
         Canvas canvas = null;
