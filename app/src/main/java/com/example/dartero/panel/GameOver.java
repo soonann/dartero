@@ -53,7 +53,7 @@ public class GameOver {
         // GameOver words
         String text = "Game Over";
         float x = 350;
-        float y = 1400;
+        float y = canvas.getHeight()/4;
         canvas.drawText(text, x, y, wordPaint);
 
         button.draw(canvas);

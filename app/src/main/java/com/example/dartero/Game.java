@@ -19,6 +19,7 @@ import com.example.dartero.objects.Player;
 import com.example.dartero.objects.PlayerState;
 import com.example.dartero.panel.GameOver;
 import com.example.dartero.panel.Joystick;
+import com.example.dartero.panel.Score;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,6 +51,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private List<Dart> darts = new ArrayList<>();
     private GameOver gameOver;
 
+    private Score score;
+
     private static int count = 0;
     public Game(Context context) {
         super(context);
@@ -65,6 +68,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         shootSound = MediaPlayer.create(context, R.raw.pew);
         shootSound.setLooping(false);
 
+
         setFocusable(true);
     }
 
@@ -78,6 +82,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         player = new Player(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, joystick);
 //        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4,  player));
         mobs = new ArrayList<>();
+        score = new Score(getContext());
+
         mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/4,  getResources().getDisplayMetrics().heightPixels/6 * 2, player));
     }
 
@@ -107,6 +113,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         player.draw(canvas);
         joystick.draw(canvas);
+        score.draw(canvas);
         for (Mob mob: mobs) {
             mob.draw(canvas);
         }
@@ -120,6 +127,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+
+
     public void drawFPS(Canvas canvas, double averageFPS) {
         String fpsText = String.format("FPS: %.2f", averageFPS);
         Paint paint = new Paint();
@@ -128,6 +137,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         paint.setColor(color);
         canvas.drawText(fpsText, 100,100,paint);
     }
+
 
     public void update() {
         // Stop updating game when player is dead
@@ -170,6 +180,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 // if there is collision remove current enemy
                 iteratorMob.remove();
                 player.setHealthPoints(player.getHealthPoints() - 1);
+                score.deductPoint(5);
             }
         }
 
@@ -181,6 +192,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 Mob mob = dart.getNearestMob();
                 mob.setHealthPoints(mob.getHealthPoints() - 1);
                 if(mob.getHealthPoints() < 1) {
+                    score.addPoint(10);
                     mobs.remove(mob);
                 }
             }
