@@ -103,7 +103,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        drawFPS(canvas);
         player.draw(canvas);
         joystick.draw(canvas);
         for (Mob mob: mobs) {
@@ -119,14 +118,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    public void drawFPS(Canvas canvas) {
-        String averageFPS = Double.toString(gameLoop.getAverageFPS());
+    public void drawFPS(Canvas canvas, double averageFPS) {
+        String fpsText = String.format("FPS: %.2f", averageFPS);
         Paint paint = new Paint();
         int color = ContextCompat.getColor(getContext(), R.color.white);
         paint.setTextSize(50);
         paint.setColor(color);
-        canvas.drawText("FPS: " + averageFPS, 100,100,paint);
-
+        canvas.drawText(fpsText, 100,100,paint);
     }
 
     public void update() {

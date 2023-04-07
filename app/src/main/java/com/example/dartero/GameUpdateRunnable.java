@@ -10,7 +10,7 @@ public class GameUpdateRunnable implements Runnable {
     private final int targetFPS = 60;
 
     /**
-     * Constructure for the GameUpdateRunnable class
+     * Constructor for the GameUpdateRunnable class
      * @param game The Game instance
      */
     public GameUpdateRunnable(Game game) {
