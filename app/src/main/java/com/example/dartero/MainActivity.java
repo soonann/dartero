@@ -2,8 +2,10 @@ package com.example.dartero;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -20,25 +22,11 @@ public class MainActivity extends AppCompatActivity {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
-        setContentView(new Game(this));
-
-        // Initialize the MediaPlayer with background music; MediaPlayer class uses separate thread by default.
-        mediaPlayer = MediaPlayer.create(this, R.raw.kirby);
-
-        // Start playing the music
-        mediaPlayer.setLooping(true); // Loop music
-        mediaPlayer.start();
+        setContentView(R.layout.activity_main);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        // Release MediaPlayer resources when activity is destroyed
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
+    public void startBtnClicked(View view) {
+        Intent indent = new Intent(this, GameActivity.class);
+        startActivity(indent);
     }
 }
