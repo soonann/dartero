@@ -7,18 +7,19 @@ import android.graphics.Paint;
 import androidx.core.content.ContextCompat;
 
 import com.example.dartero.R;
+import com.example.dartero.objects.ObjectsWithHealth;
 import com.example.dartero.objects.Player;
 
 /**
  * HealthBar display on screen
  */
 public class HealthBar {
-    private Player player;
+    private ObjectsWithHealth object;
     private int width, height, margin;
     private Paint borderPaint, healthPaint;
 
-    public HealthBar(Context context, Player player) {
-        this.player = player;
+    public HealthBar(Context context, ObjectsWithHealth object) {
+        this.object = object;
         this.width = 150;
         this.height = 40;
         this.margin = 2;
@@ -36,14 +37,14 @@ public class HealthBar {
 
     public void draw(Canvas canvas) {
         // move along with the player, get position
-        float x = (float) player.getPositionX();
-        float y = (float) player.getPositionY();
+        float x = (float) object.getPositionX();
+        float y = (float) object.getPositionY();
 
         // place healthbar above the player
         float distanceToPlayer = 80;
 
         // total health of the player
-        float healthPointsPercentage = (float) player.getHealthPoints()/player.MAX_HEALTH_POINTS;
+        float healthPointsPercentage = (float) object.getHealthPoints()/object.MAX_HEALTH_POINTS;
 
         // Draw border
         float borderLeft, borderTop, borderRight, borderBtm;

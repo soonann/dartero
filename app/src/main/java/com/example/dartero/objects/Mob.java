@@ -8,8 +8,10 @@ import androidx.core.content.ContextCompat;
 
 import com.example.dartero.GameLoop;
 import com.example.dartero.R;
+import com.example.dartero.panel.HealthBar;
 
-public class Mob extends GameObject {
+public class Mob extends ObjectsWithHealth {
+    public static int MAX_HEALTH_POINTS = 5;
     private static double SPEED_MULTIPLIER = 0.6;
     private static final double SPEED_PIXEL_PER_SECOND = Player.SPEED_PIXEL_PER_SECOND * SPEED_MULTIPLIER;
     private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / 100;
@@ -18,6 +20,9 @@ public class Mob extends GameObject {
     private static final double UPDATES_PER_SPAWN = 100/SPAWNS_PER_SECOND;
     private static double updatesUntilNextSpawn = UPDATES_PER_SPAWN;
 
+    private HealthBar healthBar;
+
+    private int healthPoints;
 
 
     public static final double radius = 50;
@@ -32,6 +37,8 @@ public class Mob extends GameObject {
         this.player = player;
         paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.mob));
+        this.healthBar = new HealthBar(context,this);
+        this.healthPoints = MAX_HEALTH_POINTS;
     }
 
     public Mob(Context context, Player player) {
@@ -39,6 +46,8 @@ public class Mob extends GameObject {
         this.player = player;
         paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.mob));
+        this.healthBar = new HealthBar(context,this);
+        this.healthPoints = MAX_HEALTH_POINTS;
     }
 
     /**
@@ -59,6 +68,7 @@ public class Mob extends GameObject {
     @Override
     public void draw(Canvas canvas) {
         canvas.drawCircle((float) positionX, (float) positionY, (float) radius, paint);
+        healthBar.draw(canvas);
     }
 
     @Override
@@ -98,6 +108,16 @@ public class Mob extends GameObject {
         }
 
 
+    }
+
+    public int getHealthPoints() {
+        return healthPoints;
+    }
+
+    public void setHealthPoints(int healthPoints) {
+        if (healthPoints >= 0) {
+            this.healthPoints = healthPoints;
+        }
     }
 
 

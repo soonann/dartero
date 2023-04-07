@@ -175,7 +175,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             shootSound.start();
             if(GameObject.isColliding(dart,dart.getNearestMob())) {
                 iteratorDart.remove();
-                mobs.remove(dart.getNearestMob());
+                Mob mob = dart.getNearestMob();
+                mob.setHealthPoints(mob.getHealthPoints() - 1);
+                if(mob.getHealthPoints() < 1) {
+                    mobs.remove(mob);
+                }
             }
         }
     }
