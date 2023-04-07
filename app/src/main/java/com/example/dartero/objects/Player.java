@@ -23,17 +23,14 @@ public class Player extends ObjectsWithHealth {
 
     private final Joystick joystick;
     private HealthBar healthBar;
-    private int healthPoints;
-
 
     public Player(Context context, double positionX, double positionY, Joystick joystick) {
-        super(positionX,positionY,radius);
+        super(positionX, positionY, radius, MAX_HEALTH_POINTS);
         this.joystick = joystick;
         paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.player));
         this.playerState = new PlayerState(this);
-        this.healthBar = new HealthBar(context,this);
-        this.healthPoints = MAX_HEALTH_POINTS;
+        this.healthBar = new HealthBar(context, this);
     }
 
     public void draw(Canvas canvas) {
@@ -66,13 +63,5 @@ public class Player extends ObjectsWithHealth {
         return playerState;
     }
 
-    public int getHealthPoints() {
-        return healthPoints;
-    }
 
-    public void setHealthPoints(int healthPoints) {
-        if (healthPoints >= 0) {
-            this.healthPoints = healthPoints;
-        }
-    }
 }

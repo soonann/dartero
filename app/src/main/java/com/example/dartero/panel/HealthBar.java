@@ -44,8 +44,7 @@ public class HealthBar {
         float distanceToPlayer = 80;
 
         // total health of the player
-        float healthPointsPercentage = (float) object.getHealthPoints()/object.MAX_HEALTH_POINTS;
-
+        float healthPointsPercentage = (float) object.getHealthPoints()/object.getMaxHealthPoints();
         // Draw border
         float borderLeft, borderTop, borderRight, borderBtm;
         borderLeft= x - width/2;

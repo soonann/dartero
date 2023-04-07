@@ -11,7 +11,7 @@ import com.example.dartero.R;
 import com.example.dartero.panel.HealthBar;
 
 public class Mob extends ObjectsWithHealth {
-    public static int MAX_HEALTH_POINTS = 5;
+    public static int MAX_HEALTH_POINTS = 2;
     private static double SPEED_MULTIPLIER = 0.6;
     private static final double SPEED_PIXEL_PER_SECOND = Player.SPEED_PIXEL_PER_SECOND * SPEED_MULTIPLIER;
     private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / 100;
@@ -22,7 +22,6 @@ public class Mob extends ObjectsWithHealth {
 
     private HealthBar healthBar;
 
-    private int healthPoints;
 
 
     public static final double radius = 50;
@@ -32,7 +31,7 @@ public class Mob extends ObjectsWithHealth {
 
     // TODO: first mob spawn bug; spawn further
     public Mob(Context context, double positionX, double positionY, Player player) {
-        super(positionX,positionY,radius);
+        super(positionX,positionY,radius,MAX_HEALTH_POINTS);
 
         this.player = player;
         paint = new Paint();
@@ -42,12 +41,11 @@ public class Mob extends ObjectsWithHealth {
     }
 
     public Mob(Context context, Player player) {
-        super(Math.random()*1000, Math.random()*1000,radius);
+        super(Math.random() * 1000, Math.random() * 1000, radius, MAX_HEALTH_POINTS);
         this.player = player;
         paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.mob));
-        this.healthBar = new HealthBar(context,this);
-        this.healthPoints = MAX_HEALTH_POINTS;
+        this.healthBar = new HealthBar(context, this);
     }
 
     /**
@@ -110,15 +108,6 @@ public class Mob extends ObjectsWithHealth {
 
     }
 
-    public int getHealthPoints() {
-        return healthPoints;
-    }
-
-    public void setHealthPoints(int healthPoints) {
-        if (healthPoints >= 0) {
-            this.healthPoints = healthPoints;
-        }
-    }
 
 
 }
