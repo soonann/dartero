@@ -50,6 +50,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private List<Dart> darts = new ArrayList<>();
     private GameOver gameOver;
 
+    private static int count = 0;
     public Game(Context context) {
         super(context);
         SurfaceHolder surfaceHolder = getHolder();
@@ -151,6 +152,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Dart.mobs=mobs;
 
         if (Dart.readyToShoot() && darts.size() < 1) {
+            Log.d("dart shot!", Integer.toString(count++));
+            shootSound.start();
             darts.add(new Dart(getContext()));
         }
 
@@ -173,7 +176,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Iterator<Dart> iteratorDart = darts.iterator();
         while (iteratorDart.hasNext()) {
             Dart dart = iteratorDart.next();
-            shootSound.start();
             if(GameObject.isColliding(dart,dart.getNearestMob())) {
                 iteratorDart.remove();
                 Mob mob = dart.getNearestMob();
