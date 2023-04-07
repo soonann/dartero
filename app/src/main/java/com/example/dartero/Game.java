@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,6 +16,7 @@ import com.example.dartero.objects.Dart;
 import com.example.dartero.objects.GameObject;
 import com.example.dartero.objects.Mob;
 import com.example.dartero.objects.Player;
+import com.example.dartero.objects.PlayerState;
 import com.example.dartero.panel.GameOver;
 import com.example.dartero.panel.Joystick;
 
@@ -22,6 +24,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Game class represents the main game logic and rendering for the Dartero game.
+ * It handles player input, game objects, updates game state, and renders the game on the screen.
+ * This class extends SurfaceView and implements SurfaceHolder.Callback for drawing and updating game objects.
+ *
+ * The Game class contains the following game elements:
+ * - Player: The main character controlled by the user
+ * - Joystick: The on-screen control for moving the player
+ * - Mobs: A list of enemy mobs
+ * - Darts: A list of darts shot by the player
+ * - GameOver: The game over screen displayed when the player loses
+ * - GameLoop: The game loop responsible for updating and rendering the game
+ *
+ * The Game class also handles touch events for controlling the player and restarting the game.
+ */
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private MediaPlayer shootSound;
 
@@ -86,7 +103,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        drawUPS(canvas);
         drawFPS(canvas);
         player.draw(canvas);
         joystick.draw(canvas);
@@ -103,22 +119,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    public void drawUPS(Canvas canvas) {
-        String averageUPS = Double.toString(gameLoop.getAverageUPS());
-        Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.white);
-        paint.setTextSize(50);
-        paint.setColor(color);
-        canvas.drawText("UPS: " + averageUPS, 100,100,paint);
-    }
-
     public void drawFPS(Canvas canvas) {
         String averageFPS = Double.toString(gameLoop.getAverageFPS());
         Paint paint = new Paint();
         int color = ContextCompat.getColor(getContext(), R.color.white);
         paint.setTextSize(50);
         paint.setColor(color);
-        canvas.drawText("FPS: " + averageFPS, 100,200,paint);
+        canvas.drawText("FPS: " + averageFPS, 100,100,paint);
 
     }
 

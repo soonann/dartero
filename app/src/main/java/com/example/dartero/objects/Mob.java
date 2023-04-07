@@ -12,10 +12,10 @@ import com.example.dartero.R;
 public class Mob extends GameObject {
     private static double SPEED_MULTIPLIER = 0.6;
     private static final double SPEED_PIXEL_PER_SECOND = Player.SPEED_PIXEL_PER_SECOND * SPEED_MULTIPLIER;
-    private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / GameLoop.MAX_UPS;
+    private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / 100;
     private static final double SPAWNS_PER_MINUTE = 20;
     private static final double SPAWNS_PER_SECOND = SPAWNS_PER_MINUTE/60.0;
-    private static final double UPDATES_PER_SPAWN = GameLoop.MAX_UPS/SPAWNS_PER_SECOND;
+    private static final double UPDATES_PER_SPAWN = 100/SPAWNS_PER_SECOND;
     private static double updatesUntilNextSpawn = UPDATES_PER_SPAWN;
 
 

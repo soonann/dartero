@@ -15,7 +15,7 @@ public class Player extends GameObject {
 
     public static final double SPEED_PIXEL_PER_SECOND = 1000;
     public static final int MAX_HEALTH_POINTS = 5;
-    private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / GameLoop.MAX_UPS;
+    private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / 100;
 
     public static final double radius = 70;
     private Paint paint;

@@ -15,10 +15,10 @@ import java.util.List;
 public class Dart extends GameObject {
     private static double SPEED_MULTIPLIER = 2.0;
     private static final double SPEED_PIXEL_PER_SECOND = Player.SPEED_PIXEL_PER_SECOND * SPEED_MULTIPLIER;
-    private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / GameLoop.MAX_UPS;
+    private static final double MAX_SPEED = SPEED_PIXEL_PER_SECOND / 100;
     private static final double SHOTS_PER_MINUTE = 40;
     private static final double SHOTS_PER_SECOND = SHOTS_PER_MINUTE/60.0;
-    private static final double UPDATES_PER_SHOT = GameLoop.MAX_UPS/SHOTS_PER_SECOND;
+    private static final double UPDATES_PER_SHOT = 100/SHOTS_PER_SECOND;
     private static double updatesUntilNextShot = UPDATES_PER_SHOT;
 
     private Mob nearestMob;
