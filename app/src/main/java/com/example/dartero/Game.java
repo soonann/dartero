@@ -149,7 +149,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Dart.player=player;
         Dart.mobs=mobs;
 
-        if (Dart.readyToShoot()) {
+        if (Dart.readyToShoot() && darts.size() < 1) {
             darts.add(new Dart(getContext()));
         }
 
