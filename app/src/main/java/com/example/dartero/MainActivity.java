@@ -36,17 +36,7 @@ public class MainActivity extends AppCompatActivity {
         name = findViewById(R.id.name);
         startBtn = findViewById(R.id.startBtn);
 
-        // Retrieve saved name using SharedPreferences and display it in name display TextView
-        SharedPreferences prefs = getSharedPreferences("name_saved", MODE_PRIVATE);
-        String savedName = prefs.getString("name", "");
-        if (!savedName.isEmpty()) {
-            name.setText(savedName);
-            name.setHint("");
-            startBtn.setEnabled(true);
-        } else {
-            name.setHint("Enter your name");
-            startBtn.setEnabled(false);
-        }
+        retrieveName();
 
         /**
          * Allow name text field to store scores in database
@@ -71,6 +61,22 @@ public class MainActivity extends AppCompatActivity {
                 // No implementation needed
             }
         });
+    }
+
+    /**
+     * Retrieve saved name using SharedPreferences and display it in name display TextView
+     */
+    private void retrieveName() {
+        SharedPreferences prefs = getSharedPreferences("name_saved", MODE_PRIVATE);
+        String savedName = prefs.getString("name", "");
+        if (!savedName.isEmpty()) {
+            name.setText(savedName);
+            name.setHint("");
+            startBtn.setEnabled(true);
+        } else {
+            name.setHint("Enter your name");
+            startBtn.setEnabled(false);
+        }
     }
 
     private void saveName(String name) {
