@@ -20,7 +20,6 @@ public interface ScoreboardAPI {
     @GET("scoreboard")
     Call<Score> getScoresByUsername(@Query("username") String username, @Query("select") String select);
 
-    @Headers({"Accept: application/json", "apikey:" + BuildConfig.API_KEY})
     @POST("scoreboard")
     Call<Score> createScore(@Body Score score);
 }
