@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dartero.database.RetrofitClient;
+import com.example.dartero.utils.RetrofitClient;
 import com.example.dartero.database.Scoreboard;
 import com.example.dartero.database.ScoreboardAPI;
 
@@ -49,7 +49,7 @@ public class ScoreboardActivity extends AppCompatActivity {
             public void onResponse(Call<List<Scoreboard>> call, Response<List<Scoreboard>> response) {
                 if (!response.isSuccessful()) {
                     // Handle errors
-                    Log.d("Response", response.toString());
+                    Log.d("Get scores response", response.toString());
                     return;
                 }
                 List<Scoreboard> scores = response.body();
@@ -62,7 +62,7 @@ public class ScoreboardActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Scoreboard>> call, Throwable t) {
-                Log.d("Response", t.toString());
+                Log.d("Get scores failed response", t.toString());
             }
         });
     }

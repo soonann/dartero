@@ -33,4 +33,8 @@ public class Score {
         String scoreText = String.format("Score: %d", score);
         canvas.drawText(scoreText,canvas.getWidth()/4,100,textColor);
    }
+
+   public int getScore() {
+        return score;
+   }
 }
