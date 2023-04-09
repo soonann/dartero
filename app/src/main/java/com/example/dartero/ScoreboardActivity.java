@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dartero.database.RetrofitClient;
-import com.example.dartero.database.Score;
+import com.example.dartero.database.Scoreboard;
 import com.example.dartero.database.ScoreboardAPI;
 
 import java.util.Collections;
@@ -22,7 +22,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * ScoreboardActivity class for displaying high scores of each player.
@@ -44,16 +43,16 @@ public class ScoreboardActivity extends AppCompatActivity {
 
         ScoreboardAPI scoreboardAPI = retrofit.create(ScoreboardAPI.class);
 
-        Call<List<Score>> call = scoreboardAPI.getAllScores("username,score");
-        call.enqueue(new Callback<List<Score>>() {
+        Call<List<Scoreboard>> call = scoreboardAPI.getAllScores("username,score");
+        call.enqueue(new Callback<List<Scoreboard>>() {
             @Override
-            public void onResponse(Call<List<Score>> call, Response<List<Score>> response) {
+            public void onResponse(Call<List<Scoreboard>> call, Response<List<Scoreboard>> response) {
                 if (!response.isSuccessful()) {
                     // Handle errors
                     Log.d("Response", response.toString());
                     return;
                 }
-                List<Score> scores = response.body();
+                List<Scoreboard> scores = response.body();
 
                 Log.d("Response", response.body().toString());
 
@@ -62,7 +61,7 @@ public class ScoreboardActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Score>> call, Throwable t) {
+            public void onFailure(Call<List<Scoreboard>> call, Throwable t) {
                 Log.d("Response", t.toString());
             }
         });
@@ -73,12 +72,12 @@ public class ScoreboardActivity extends AppCompatActivity {
      * @param scores A List of Score class object
      * @return A List of high scores for each player
      */
-    private List<Score> getHighScores(List<Score> scores) {
-        Map<String, Optional<Score>> highScoresMap = scores.stream()
-                .collect(Collectors.groupingBy(Score::getUserName,
-                        Collectors.maxBy(Comparator.comparing(Score::getScore))));
+    private List<Scoreboard> getHighScores(List<Scoreboard> scores) {
+        Map<String, Optional<Scoreboard>> highScoresMap = scores.stream()
+                .collect(Collectors.groupingBy(Scoreboard::getUserName,
+                        Collectors.maxBy(Comparator.comparing(Scoreboard::getScore))));
 
-        List<Score> highScores = highScoresMap.values().stream()
+        List<Scoreboard> highScores = highScoresMap.values().stream()
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());

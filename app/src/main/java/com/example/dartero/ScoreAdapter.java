@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dartero.database.Score;
+import com.example.dartero.database.Scoreboard;
 
 import java.util.List;
 
@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder> {
 
-    private List<Score> scores;
+    private List<Scoreboard> scores;
 
-    public ScoreAdapter(List<Score> scores) {
+    public ScoreAdapter(List<Scoreboard> scores) {
         this.scores = scores;
     }
 
@@ -32,7 +32,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ScoreViewHolder holder, int position) {
-        Score score = scores.get(position);
+        Scoreboard score = scores.get(position);
         holder.textViewPlayerName.setText(score.getUserName());
         holder.textViewPlayerScore.setText(String.valueOf(score.getScore()));
     }

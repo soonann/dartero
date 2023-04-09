@@ -20,6 +20,7 @@ public interface UserAPI {
     @GET("users")
     Call<User> getUserByUsername(@Query("username") String username, @Query("select") String select);
 
+    @Headers({"Accept: application/json", "apikey:" + BuildConfig.API_KEY})
     @POST("users")
     Call<User> createUser(@Body User user);
 }

@@ -14,12 +14,13 @@ import retrofit2.http.Query;
 public interface ScoreboardAPI {
     @Headers({"Accept: application/json", "apikey:" + BuildConfig.API_KEY})
     @GET("scoreboard")
-    Call<List<Score>> getAllScores(@Query("select") String select);
+    Call<List<Scoreboard>> getAllScores(@Query("select") String select);
 
     @Headers({"Accept: application/json", "apikey:" + BuildConfig.API_KEY})
     @GET("scoreboard")
-    Call<Score> getScoresByUsername(@Query("username") String username, @Query("select") String select);
+    Call<Scoreboard> getScoresByUsername(@Query("username") String username, @Query("select") String select);
 
+    @Headers({"Accept: application/json", "apikey:" + BuildConfig.API_KEY})
     @POST("scoreboard")
-    Call<Score> createScore(@Body Score score);
+    Call<Scoreboard> createScore(@Body Scoreboard score);
 }
