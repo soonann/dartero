@@ -1,6 +1,5 @@
 package com.example.dartero;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,9 @@ import com.example.dartero.database.Score;
 
 import java.util.List;
 
+/**
+ * ScoreAdapter class to bind Score object to RecyclerView
+ */
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder> {
 
     private List<Score> scores;

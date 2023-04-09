@@ -12,7 +12,11 @@ import com.example.dartero.database.Score;
 import com.example.dartero.database.ScoreboardAPI;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,10 +24,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * ScoreboardActivity class for displaying high scores of each player.
+ */
 public class ScoreboardActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ScoreAdapter scoreAdapter;
-    private final String API_URL = BuildConfig.API_URL;
     private Retrofit retrofit;
 
     @Override
@@ -48,9 +54,10 @@ public class ScoreboardActivity extends AppCompatActivity {
                     return;
                 }
                 List<Score> scores = response.body();
-                Collections.sort(scores);
+
                 Log.d("Response", response.body().toString());
-                scoreAdapter = new ScoreAdapter(scores);
+
+                scoreAdapter = new ScoreAdapter(getHighScores(scores));
                 recyclerView.setAdapter(scoreAdapter);
             }
 
@@ -59,6 +66,26 @@ public class ScoreboardActivity extends AppCompatActivity {
                 Log.d("Response", t.toString());
             }
         });
+    }
+
+    /**
+     * Function to get high scores for each player
+     * @param scores A List of Score class object
+     * @return A List of high scores for each player
+     */
+    private List<Score> getHighScores(List<Score> scores) {
+        Map<String, Optional<Score>> highScoresMap = scores.stream()
+                .collect(Collectors.groupingBy(Score::getUserName,
+                        Collectors.maxBy(Comparator.comparing(Score::getScore))));
+
+        List<Score> highScores = highScoresMap.values().stream()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+
+        Collections.sort(highScores);
+
+        return highScores;
     }
 }
 
