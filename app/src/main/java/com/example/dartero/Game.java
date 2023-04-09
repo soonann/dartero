@@ -86,7 +86,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         shootSound = MediaPlayer.create(context, R.raw.pew);
         shootSound.setLooping(false);
 
-
         setFocusable(true);
     }
 
@@ -170,7 +169,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void update() {
         // Stop updating game when player is dead
         if (player.getHealthPoints() <= 0) {
-            createScoreRecord();
+            if (!scoreRecorded) {
+                createScoreRecord();
+            }
             return ;
         }
 
@@ -232,9 +233,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
      * Send a POST request and create a score record in database
      */
     private void createScoreRecord() {
-        if (scoreRecorded) {
-            return ;
-        }
         scoreRecorded = true;
         int gameScore = score.getScore();
         Retrofit retrofit = RetrofitClient.getRetrofitInstance();
