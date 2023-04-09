@@ -92,4 +92,9 @@ public class MainActivity extends AppCompatActivity {
         Intent indent = new Intent(this, GameActivity.class);
         startActivity(indent);
     }
+
+    public void scoreBoardBtnClicked(View view) {
+        Intent indent = new Intent(this, ScoreboardActivity.class);
+        startActivity(indent);
+    }
 }
