@@ -1,9 +1,6 @@
 package com.example.dartero;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,9 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.dartero.utils.RetrofitClient;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.dartero.database.User;
 import com.example.dartero.database.UserAPI;
+import com.example.dartero.utils.RetrofitClient;
 import com.example.dartero.utils.SharedPreferencesUtils;
 
 import java.util.List;
@@ -83,13 +82,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private void retrieveName() {
         String savedName = SharedPreferencesUtils.getName(MainActivity.this);
-        if (!savedName.isEmpty()) {
+        if (savedName == null || savedName.isEmpty()) {
+            name.setHint("Enter your name");
+            startBtn.setEnabled(false);
+        } else {
             name.setText(savedName);
             name.setHint("");
             startBtn.setEnabled(true);
-        } else {
-            name.setHint("Enter your name");
-            startBtn.setEnabled(false);
         }
     }
 
