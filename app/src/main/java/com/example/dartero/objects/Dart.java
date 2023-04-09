@@ -50,7 +50,7 @@ public class Dart extends GameObject {
 
     /**
      * Checks if dart should fire when there are mobs and the player is standing still
-     * @return
+     * @return Boolean
      */
     public static boolean readyToShoot() {
         if (updatesUntilNextShot <= 0 && mobs.size() > 0 && player.getPlayerState().getState() == PlayerState.State.NOT_MOVING) {
