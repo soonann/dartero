@@ -17,4 +17,6 @@ public class User {
     public String getName() {
         return name;
     }
+
+    public String toString() { return "Player name: " + name; }
 }

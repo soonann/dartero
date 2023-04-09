@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dartero.database.RetrofitClient;
 import com.example.dartero.database.Score;
 import com.example.dartero.database.ScoreboardAPI;
 
@@ -23,6 +24,7 @@ public class ScoreboardActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ScoreAdapter scoreAdapter;
     private final String API_URL = BuildConfig.API_URL;
+    private Retrofit retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +34,7 @@ public class ScoreboardActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewScores);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        retrofit = RetrofitClient.getRetrofitInstance();
 
         ScoreboardAPI scoreboardAPI = retrofit.create(ScoreboardAPI.class);
 
