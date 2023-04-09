@@ -18,6 +18,7 @@ import com.example.dartero.objects.Mob;
 import com.example.dartero.objects.Player;
 import com.example.dartero.objects.PlayerState;
 import com.example.dartero.panel.GameOver;
+import com.example.dartero.panel.Pause;
 import com.example.dartero.panel.Joystick;
 import com.example.dartero.panel.Score;
 
@@ -51,6 +52,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private List<Dart> darts = new ArrayList<>();
     private GameOver gameOver;
 
+    private Pause pause;
+
+    private boolean isPaused;
+
+
     private Score score;
 
     private static int count = 0;
@@ -60,8 +66,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         surfaceHolder.addCallback(this);
 
         gameOver = new GameOver(getContext());
+        pause = new Pause(getContext());
         gameLoop = new GameLoop(this, surfaceHolder);
-
+        isPaused = false;
         initGame();
 
         // Initialize shoot sound
@@ -83,7 +90,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 //        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4,  player));
         mobs = new ArrayList<>();
         score = new Score(getContext());
-
+        isPaused = false;
         mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/4,  getResources().getDisplayMetrics().heightPixels/6 * 2, player));
     }
 
@@ -93,6 +100,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void resetGame() {
         initGame();
     }
+
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
@@ -111,19 +119,24 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        player.draw(canvas);
-        joystick.draw(canvas);
-        score.draw(canvas);
-        for (Mob mob: mobs) {
-            mob.draw(canvas);
-        }
-        for (Dart dart: darts) {
-            dart.draw(canvas);
-        }
+        if (isPaused) {
+            pause.draw(canvas);
+        } else {
+            player.draw(canvas);
+            joystick.draw(canvas);
+            score.draw(canvas);
+            drawButton(canvas);
+            for (Mob mob: mobs) {
+                mob.draw(canvas);
+            }
+            for (Dart dart: darts) {
+                dart.draw(canvas);
+            }
 
-        // game over if player is dead
-        if (player.getHealthPoints() <= 0) {
-            gameOver.draw(canvas);
+            // game over if player is dead
+            if (player.getHealthPoints() <= 0) {
+                gameOver.draw(canvas);
+            }
         }
     }
 
@@ -136,6 +149,29 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         paint.setTextSize(50);
         paint.setColor(color);
         canvas.drawText(fpsText, 100,100,paint);
+    }
+
+    public void drawButton(Canvas canvas) {
+        // Define the button dimensions and position
+        int buttonWidth = 200;
+        int buttonHeight = 100;
+        int buttonPadding = 20;
+        int buttonX = canvas.getWidth() - buttonWidth - buttonPadding;
+        int buttonY = buttonPadding;
+
+        // Draw the button background
+        Paint buttonPaint = new Paint();
+        int buttoncolor = ContextCompat.getColor(getContext(), R.color.purple_200);
+        buttonPaint.setColor(buttoncolor);
+        canvas.drawRect(buttonX, buttonY, buttonX + buttonWidth, buttonY + buttonHeight, buttonPaint);
+
+        // Draw the button text
+        Paint textPaint = new Paint();
+        int color = ContextCompat.getColor(getContext(), R.color.white);
+        textPaint.setColor(color);
+        textPaint.setTextSize(40);
+        String buttonText = "Pause";
+        canvas.drawText(buttonText, buttonX + (buttonWidth/2) - (textPaint.measureText(buttonText)/2), buttonY + (buttonHeight/2), textPaint);
     }
 
 
@@ -201,6 +237,18 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        // Pause button for pausing the game
+        int buttonWidth = 200;
+        int buttonHeight = 100;
+        int buttonPadding = 20;
+        int buttonX = getWidth() - buttonWidth - buttonPadding;
+        int buttonY = buttonPadding;
+        if (event.getX() >= buttonX && event.getX() <= buttonX + buttonWidth &&
+                event.getY() >= buttonY && event.getY() <= buttonY + buttonHeight) {
+            // Set isPaused to true
+            isPaused = true;
+            return true;
+        }
         // Restart button for restarting the game
         if (player.getHealthPoints() <= 0 && event.getActionMasked() == MotionEvent.ACTION_UP) {
             if (gameOver.handleTouchEvent(event.getX(), event.getY())) {

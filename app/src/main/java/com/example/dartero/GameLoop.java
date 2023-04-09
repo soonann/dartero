@@ -12,6 +12,7 @@ public class GameLoop extends Thread{
 
     private GameUpdateRunnable updateThread;
     private GameDrawRunnable drawThread;
+//    private boolean isPaused;
 
     public GameLoop(Game game, SurfaceHolder surfaceHolder) {
 //        this.game = game;
@@ -41,6 +42,7 @@ public class GameLoop extends Thread{
         updateThread.join();
         updateThread.stop();
     }
+
 
     public void stopLoop() {
         Log.d("GameLoop.java", "stopLoop()");
