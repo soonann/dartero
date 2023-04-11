@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.content.Intent;
+
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -94,10 +96,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/4,  getResources().getDisplayMetrics().heightPixels/6 * 2, player));
     }
 
+    public void quitGame() {
+
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        getContext().startActivity(intent);
+    }
+
+
+
     /**
      * Allow reset of game when gameover
      */
     public void resetGame() {
+        gameLoop.resumeGame();
         initGame();
     }
 
@@ -247,14 +258,22 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 event.getY() >= buttonY && event.getY() <= buttonY + buttonHeight) {
             // Set isPaused to true
             isPaused = true;
+            gameLoop.pauseGame();
             return true;
         }
         if(isPaused && pause.restartButton.isPressed(event.getX(), event.getY())){
+            isPaused = false;
+            gameLoop.resumeGame();
             resetGame();
         }
 
-        if(pause.quitButton.isPressed(event.getX(), event.getY())){
+        if(isPaused && pause.resumeButton.isPressed(event.getX(), event.getY())){
+            isPaused = false;
+            gameLoop.resumeGame();
+        }
 
+        if(pause.quitButton.isPressed(event.getX(), event.getY())){
+            quitGame();
         }
 
 

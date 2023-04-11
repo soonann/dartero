@@ -37,9 +37,18 @@ public class GameLoop extends Thread{
         // Start the update thread
         updateThread.start();
 
-        while(isRunning){
-
+        while (isRunning) {
+            if (isPaused) {
+                synchronized (this) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
+
 
         drawThread.join();
         drawThread.stop();
@@ -51,10 +60,14 @@ public class GameLoop extends Thread{
 
     public void pauseGame() {
         isPaused = true;
+        updateThread.pause();
+        drawThread.pause();
     }
 
     public void resumeGame() {
         isPaused = false;
+        updateThread.resume();
+        drawThread.resume();
         synchronized (this) {
             notify();
         }
