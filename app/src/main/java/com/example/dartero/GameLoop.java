@@ -8,7 +8,8 @@ public class GameLoop extends Thread{
 
 //    private Game game;
 //    private SurfaceHolder surfaceHolder;
-
+    private boolean isRunning;
+    private boolean isPaused = false;
 
     private GameUpdateRunnable updateThread;
     private GameDrawRunnable drawThread;
@@ -27,6 +28,7 @@ public class GameLoop extends Thread{
 
     @Override
     public void run() {
+        isRunning = true;
         super.run();
 
         // Start rendering the screen
@@ -35,12 +37,27 @@ public class GameLoop extends Thread{
         // Start the update thread
         updateThread.start();
 
+        while(isRunning){
+
+        }
+
         drawThread.join();
         drawThread.stop();
 
         // Stop the update thread
         updateThread.join();
         updateThread.stop();
+    }
+
+    public void pauseGame() {
+        isPaused = true;
+    }
+
+    public void resumeGame() {
+        isPaused = false;
+        synchronized (this) {
+            notify();
+        }
     }
 
 

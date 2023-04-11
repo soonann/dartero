@@ -249,6 +249,15 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             isPaused = true;
             return true;
         }
+        if(isPaused && pause.restartButton.isPressed(event.getX(), event.getY())){
+            resetGame();
+        }
+
+        if(pause.quitButton.isPressed(event.getX(), event.getY())){
+
+        }
+
+
         // Restart button for restarting the game
         if (player.getHealthPoints() <= 0 && event.getActionMasked() == MotionEvent.ACTION_UP) {
             if (gameOver.handleTouchEvent(event.getX(), event.getY())) {
@@ -256,6 +265,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             }
             return true;
         }
+
+
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:

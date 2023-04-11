@@ -7,10 +7,12 @@ import androidx.core.content.ContextCompat;
 
 import com.example.dartero.R;
 import com.example.dartero.objects.Button;
+import com.example.dartero.Game;
 
 public class Pause {
     private Paint wordPaint, bgPaint;
-    private Button resumeButton, quitButton, restartButton;
+    public Button resumeButton, quitButton, restartButton;
+    private Game game;
 
     public Pause(Context context) {
         this.wordPaint = new Paint();
@@ -65,6 +67,7 @@ public class Pause {
         );
     }
 
+
     public void draw(Canvas canvas) {
         // Pause background
         float bgLeft = 0;
@@ -95,6 +98,7 @@ public class Pause {
             return true;
         } else if (restartButton.isPressed(x, y)) {
             // Handle the restart button press
+            game.resetGame();
             return true;
         }
         return false;
