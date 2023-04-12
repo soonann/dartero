@@ -9,6 +9,10 @@ import com.example.dartero.R;
 import com.example.dartero.objects.Button;
 import com.example.dartero.Game;
 
+/**
+ * In game pause display
+ */
+
 public class Pause {
     private Paint wordPaint, bgPaint;
     public Button resumeButton, quitButton, restartButton;
@@ -92,9 +96,11 @@ public class Pause {
     public boolean handleTouchEvent(float x, float y) {
         if (resumeButton.isPressed(x, y)) {
             // Handle the resume button press
+            game.resumeGame();
             return true;
         } else if (quitButton.isPressed(x, y)) {
             // Handle the quit button press
+            game.quitGame();
             return true;
         } else if (restartButton.isPressed(x, y)) {
             // Handle the restart button press

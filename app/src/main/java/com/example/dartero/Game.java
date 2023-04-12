@@ -40,6 +40,8 @@ import java.util.List;
  * - Darts: A list of darts shot by the player
  * - GameOver: The game over screen displayed when the player loses
  * - GameLoop: The game loop responsible for updating and rendering the game
+ * - pause: An instance of Pause class representing the pause screen.
+ * - isPaused: A boolean indicating whether the game is currently paused.
  *
  * The Game class also handles touch events for controlling the player and restarting the game.
  */
@@ -101,7 +103,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Intent intent = new Intent(getContext(), MainActivity.class);
         getContext().startActivity(intent);
     }
-
+    public void resumeGame(){
+        gameLoop.resumeGame();
+    }
 
 
     /**
@@ -150,7 +154,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
-
 
 
     public void drawFPS(Canvas canvas, double averageFPS) {
