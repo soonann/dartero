@@ -42,7 +42,7 @@ public class Potion extends GameObject{
 
     private void tryConsume() {
         if (GameObject.isColliding(this,player)) {
-            Log.d("Potion", "consumed ");
+            Log.d("Potion", "consumed");
 
             this.consumed = true;
             player.setHealthPoints(player.getHealthPoints()+1);

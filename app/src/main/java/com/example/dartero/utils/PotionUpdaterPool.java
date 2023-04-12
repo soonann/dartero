@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * A class that represents a pool of threads for growing radii of background circle shapes.
+ * A class that represents a pool of threads for running the potions.
  */
 public class PotionUpdaterPool {
 

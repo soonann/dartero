@@ -229,6 +229,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
+        /**
+         * Here when a mob is killed 10 points will
+         * be added and a potion will be spawned using a thread
+         * from the threadpool
+         */
         Iterator<Dart> iteratorDart = darts.iterator();
         while (iteratorDart.hasNext()) {
             Dart dart = iteratorDart.next();
