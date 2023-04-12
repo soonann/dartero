@@ -1,4 +1,4 @@
-package com.example.dartero.database;
+package com.example.dartero.utils;
 
 import com.example.dartero.BuildConfig;
 

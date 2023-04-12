@@ -2,6 +2,9 @@ package com.example.dartero.database;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Scoreboard model
+ */
 public class Scoreboard implements Comparable<Scoreboard> {
     @SerializedName("username")
     private String userName;
@@ -29,6 +32,11 @@ public class Scoreboard implements Comparable<Scoreboard> {
         this.score = score;
     }
 
+    /**
+     * Sort the Scores in decremental order
+     * @param s The Scoreboard Object
+     * @return Integer position
+     */
     @Override
     public int compareTo(Scoreboard s) {
         if (this.score > s.getScore())

@@ -11,6 +11,9 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
+/**
+ * UserAPI is an interface class for REST API calls to Users in database
+ */
 public interface UserAPI {
     @Headers({"Accept: application/json", "apikey:" + BuildConfig.API_KEY})
     @GET("users")
@@ -20,7 +23,7 @@ public interface UserAPI {
     @GET("users")
     Call<User> getUserByUsername(@Query("username") String username, @Query("select") String select);
 
-    @Headers({"Accept: application/json", "apikey:" + BuildConfig.API_KEY})
+    @Headers({"apikey:" + BuildConfig.API_KEY})
     @POST("users")
     Call<User> createUser(@Body User user);
 }

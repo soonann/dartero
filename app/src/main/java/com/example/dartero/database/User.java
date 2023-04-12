@@ -2,21 +2,24 @@ package com.example.dartero.database;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * User model
+ */
 public class User {
     @SerializedName("username")
-    private String name;
+    private String username;
 
-    public User (String name) {
-        this.name = name;
+    public User (String username) {
+        this.username = username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public String toString() { return "Player name: " + name; }
+    public String toString() { return "Player name: " + username; }
 }
