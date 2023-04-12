@@ -10,7 +10,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import android.content.Intent;
 import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -23,6 +26,7 @@ import com.example.dartero.objects.Mob;
 import com.example.dartero.objects.Player;
 import com.example.dartero.objects.Potion;
 import com.example.dartero.panel.GameOver;
+import com.example.dartero.panel.Pause;
 import com.example.dartero.panel.Joystick;
 import com.example.dartero.panel.Score;
 import com.example.dartero.utils.PotionUpdaterPool;
@@ -50,6 +54,8 @@ import retrofit2.Retrofit;
  * - Darts: A list of darts shot by the player
  * - GameOver: The game over screen displayed when the player loses
  * - GameLoop: The game loop responsible for updating and rendering the game
+ * - pause: An instance of Pause class representing the pause screen.
+ * - isPaused: A boolean indicating whether the game is currently paused.
  *
  * The Game class also handles touch events for controlling the player and restarting the game.
  */
@@ -68,6 +74,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private List<Potion> potions;
     private GameOver gameOver;
 
+    private Pause pause;
+
+    private boolean isPaused;
+
+
     private Score score;
 
     private final String username;
@@ -81,8 +92,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         username = SharedPreferencesUtils.getName(context);
 
         gameOver = new GameOver(getContext());
+        pause = new Pause(getContext());
         gameLoop = new GameLoop(this, surfaceHolder);
-
+        isPaused = false;
         initGame();
 
         // Initialize shoot sound
@@ -104,19 +116,31 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         GameObject.maxY = getResources().getDisplayMetrics().heightPixels;
         joystick = new Joystick(getContext(), getResources().getDisplayMetrics().widthPixels/2, getResources().getDisplayMetrics().heightPixels/6 * 5, 70, 40);
         player = new Player(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, joystick);
-
+        isPaused = false;
         score = new Score(getContext());
         darts = new ArrayList<>();
         mobs = new ArrayList<>();
         potions = new ArrayList<>();
     }
 
+    public void quitGame() {
+
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        getContext().startActivity(intent);
+    }
+    public void resumeGame(){
+        gameLoop.resumeGame();
+    }
+
+
     /**
      * Allow reset of game when gameover
      */
     public void resetGame() {
+        gameLoop.resumeGame();
         initGame();
     }
+
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
@@ -139,15 +163,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        player.draw(canvas);
-        joystick.draw(canvas);
-        score.draw(canvas);
-        for (Mob mob: mobs) {
-            mob.draw(canvas);
-        }
-        for (Dart dart: darts) {
-            dart.draw(canvas);
-        }
+        if (isPaused) {
+            pause.draw(canvas);
+        } else {
+            player.draw(canvas);
+            joystick.draw(canvas);
+            score.draw(canvas);
+            drawButton(canvas);
+            for (Mob mob: mobs) {
+                mob.draw(canvas);
+            }
+            for (Dart dart: darts) {
+                dart.draw(canvas);
+            }
 
         for (Potion potion: potions) {
             potion.draw(canvas);
@@ -173,9 +201,34 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawText(fpsText, 100,100,paint);
     }
 
+    public void drawButton(Canvas canvas) {
+        // Define the button dimensions and position
+        int buttonWidth = 200;
+        int buttonHeight = 100;
+        int buttonPadding = 20;
+        int buttonX = canvas.getWidth() - buttonWidth - buttonPadding;
+        int buttonY = buttonPadding;
+
+        // Draw the button background
+        Paint buttonPaint = new Paint();
+        int buttoncolor = ContextCompat.getColor(getContext(), R.color.purple_200);
+        buttonPaint.setColor(buttoncolor);
+        canvas.drawRect(buttonX, buttonY, buttonX + buttonWidth, buttonY + buttonHeight, buttonPaint);
+
+        // Draw the button text
+        Paint textPaint = new Paint();
+        int color = ContextCompat.getColor(getContext(), R.color.white);
+        textPaint.setColor(color);
+        textPaint.setTextSize(40);
+        String buttonText = "Pause";
+        canvas.drawText(buttonText, buttonX + (buttonWidth/2) - (textPaint.measureText(buttonText)/2), buttonY + (buttonHeight/2), textPaint);
+    }
+
+
     /**
      * Updates the game logic
      */
+
     public void update() {
         // Stop updating game when player is dead
         if (player.getHealthPoints() <= 0) {
@@ -305,6 +358,35 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        // Pause button for pausing the game
+        int buttonWidth = 200;
+        int buttonHeight = 100;
+        int buttonPadding = 20;
+        int buttonX = getWidth() - buttonWidth - buttonPadding;
+        int buttonY = buttonPadding;
+        if (event.getX() >= buttonX && event.getX() <= buttonX + buttonWidth &&
+                event.getY() >= buttonY && event.getY() <= buttonY + buttonHeight) {
+            // Set isPaused to true
+            isPaused = true;
+            gameLoop.pauseGame();
+            return true;
+        }
+        if(isPaused && pause.restartButton.isPressed(event.getX(), event.getY())){
+            isPaused = false;
+            gameLoop.resumeGame();
+            resetGame();
+        }
+
+        if(isPaused && pause.resumeButton.isPressed(event.getX(), event.getY())){
+            isPaused = false;
+            gameLoop.resumeGame();
+        }
+
+        if(pause.quitButton.isPressed(event.getX(), event.getY())){
+            quitGame();
+        }
+
+
         // Restart button for restarting the game
         if (player.getHealthPoints() <= 0 && event.getActionMasked() == MotionEvent.ACTION_UP) {
             if (gameOver.handleTouchEvent(event.getX(), event.getY())) {
@@ -312,6 +394,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             }
             return true;
         }
+
+
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:

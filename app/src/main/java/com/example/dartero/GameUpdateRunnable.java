@@ -9,6 +9,9 @@ public class GameUpdateRunnable implements Runnable {
     private Game game;
     private final int targetFPS = 60;
 
+    private boolean paused = false;
+
+
     /**
      * Constructor for the GameUpdateRunnable class
      * @param game The Game instance
@@ -41,10 +44,31 @@ public class GameUpdateRunnable implements Runnable {
         }
     }
 
+    /**
+     * Pause the game update thread
+     */
+    public void pause() {
+        paused = true;
+    }
+
+    /**
+     * Resume the game update thread
+     */
+    public void resume() {
+        paused = false;
+    }
+
     @Override
     public void run() {
         long targetInterval = 1000 / targetFPS;
         while(running) {
+            while(paused) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             game.update();
             try {
                 long elapsedTime = System.currentTimeMillis() % targetInterval;
