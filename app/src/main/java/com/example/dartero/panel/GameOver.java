@@ -3,6 +3,8 @@ package com.example.dartero.panel;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+
 import androidx.core.content.ContextCompat;
 
 import com.example.dartero.R;
@@ -52,8 +54,10 @@ public class GameOver {
 
         // GameOver words
         String text = "Game Over";
-        float x = 350;
-        float y = canvas.getHeight()/4;
+        Rect textBounds = new Rect();
+        wordPaint.getTextBounds(text, 0, text.length(), textBounds);
+        float x = (canvas.getWidth() - textBounds.width()) / 2;
+        float y = (canvas.getHeight() - textBounds.height()) / 4.0f + textBounds.height();
         canvas.drawText(text, x, y, wordPaint);
 
         button.draw(canvas);
