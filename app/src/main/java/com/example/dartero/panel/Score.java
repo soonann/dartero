@@ -31,7 +31,7 @@ public class Score {
 
    public void draw(Canvas canvas) {
         String scoreText = String.format("Score: %d", score);
-        canvas.drawText(scoreText,canvas.getWidth()/4,100,textColor);
+        canvas.drawText(scoreText,100,200,textColor);
    }
 
    public int getScore() {
