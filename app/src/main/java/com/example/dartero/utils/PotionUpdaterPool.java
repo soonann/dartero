@@ -18,4 +18,8 @@ public class PotionUpdaterPool {
     public void submit(final Runnable task) {
         pool.submit(task);
     }
+
+    public void shutdown() {
+        pool.shutdown();
+    }
 }

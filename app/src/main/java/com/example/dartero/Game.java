@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -53,26 +55,25 @@ import retrofit2.Retrofit;
  */
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private MediaPlayer shootSound;
+    private Vibrator vibrator;
+    private final VibrationEffect VIBRATION_EFFECT = VibrationEffect.createOneShot(200,VibrationEffect.DEFAULT_AMPLITUDE);
+    private final PotionUpdaterPool potionUpdaterPool = new PotionUpdaterPool();
 
     private Joystick joystick;
     private Player player;
     private GameLoop gameLoop;
 
-    private List<Mob> mobs = new ArrayList<>();
-    private List<Dart> darts = new ArrayList<>();
-    private List<Potion> potions = new ArrayList<>();
+    private List<Mob> mobs;
+    private List<Dart> darts;
+    private List<Potion> potions;
     private GameOver gameOver;
 
     private Score score;
 
     private final String username;
     private boolean scoreRecorded;  // to check if the score have been recorded
-
     private static int count = 0;
 
-
-
-    private final PotionUpdaterPool potionUpdaterPool = new PotionUpdaterPool();
     public Game(Context context) {
         super(context);
         SurfaceHolder surfaceHolder = getHolder();
@@ -88,6 +89,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         shootSound = MediaPlayer.create(context, R.raw.pew);
         shootSound.setLooping(false);
 
+        // Initialize Vibrator
+        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
         setFocusable(true);
     }
 
@@ -100,11 +104,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         GameObject.maxY = getResources().getDisplayMetrics().heightPixels;
         joystick = new Joystick(getContext(), getResources().getDisplayMetrics().widthPixels/2, getResources().getDisplayMetrics().heightPixels/6 * 5, 70, 40);
         player = new Player(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4, joystick);
-//        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/2,  getResources().getDisplayMetrics().heightPixels/6 * 4,  player));
-        mobs = new ArrayList<>();
-        score = new Score(getContext());
 
-        mobs.add(new Mob(getContext(), getResources().getDisplayMetrics().widthPixels/4,  getResources().getDisplayMetrics().heightPixels/6 * 2, player));
+        score = new Score(getContext());
+        darts = new ArrayList<>();
+        mobs = new ArrayList<>();
+        potions = new ArrayList<>();
     }
 
     /**
@@ -223,6 +227,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             Mob mob = iteratorMob.next();
             if (GameObject.isColliding(mob, player)) {
                 // if there is collision remove current enemy
+                if (vibrator != null && vibrator.hasVibrator()) {
+                    // Vibrate for 200 milliseconds
+                    vibrator.vibrate(VIBRATION_EFFECT);
+                    Log.d("Vibration", "Vibrate for 200 ms");
+                } else {
+                    Log.d("Vibration", "Vibrator is not available or device does not support vibration");
+                }
                 iteratorMob.remove();
                 player.setHealthPoints(player.getHealthPoints() - 1);
                 score.deductPoint(5);
@@ -250,13 +261,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * Use ExecutorService to assign a thread for running the Potion threads
+     */
     public void createPotionAndStartThread() {
         Potion potion = new Potion(getContext(), player);
         potions.add(potion);
         potionUpdaterPool.submit(potion::run);
     }
-
-
 
     /**
      * Send a POST request and create a score record in database
