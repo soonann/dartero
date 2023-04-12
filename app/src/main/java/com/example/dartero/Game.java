@@ -1,9 +1,6 @@
 package com.example.dartero;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
@@ -18,15 +15,15 @@ import androidx.core.content.ContextCompat;
 
 import com.example.dartero.database.Scoreboard;
 import com.example.dartero.database.ScoreboardAPI;
-import com.example.dartero.database.User;
 import com.example.dartero.objects.Dart;
 import com.example.dartero.objects.GameObject;
 import com.example.dartero.objects.Mob;
 import com.example.dartero.objects.Player;
-import com.example.dartero.objects.PlayerState;
+import com.example.dartero.objects.Potion;
 import com.example.dartero.panel.GameOver;
 import com.example.dartero.panel.Joystick;
 import com.example.dartero.panel.Score;
+import com.example.dartero.utils.PotionUpdaterPool;
 import com.example.dartero.utils.RetrofitClient;
 import com.example.dartero.utils.SharedPreferencesUtils;
 
@@ -63,6 +60,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private List<Mob> mobs = new ArrayList<>();
     private List<Dart> darts = new ArrayList<>();
+    private List<Potion> potions = new ArrayList<>();
     private GameOver gameOver;
 
     private Score score;
@@ -71,6 +69,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private boolean scoreRecorded;  // to check if the score have been recorded
 
     private static int count = 0;
+
+
+
+    private final PotionUpdaterPool potionUpdaterPool = new PotionUpdaterPool();
     public Game(Context context) {
         super(context);
         SurfaceHolder surfaceHolder = getHolder();
@@ -143,6 +145,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             dart.draw(canvas);
         }
 
+        for (Potion potion: potions) {
+            potion.draw(canvas);
+        }
+
         // game over if player is dead
         if (player.getHealthPoints() <= 0) {
             gameOver.draw(canvas);
@@ -201,6 +207,15 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             dart.update();
         }
 
+        //Iterator through potions and check for consumed
+        Iterator<Potion> iteratorPotion = potions.iterator();
+        while (iteratorPotion.hasNext()) {
+            Potion potion = iteratorPotion.next();
+            if(potion.isConsumed()) {
+                iteratorPotion.remove();
+            }
+        }
+
 
         //Iterate through mobs and check for collision
         Iterator<Mob> iteratorMob = mobs.iterator();
@@ -224,10 +239,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 if(mob.getHealthPoints() < 1) {
                     score.addPoint(10);
                     mobs.remove(mob);
+                    createPotionAndStartThread();
                 }
             }
         }
     }
+
+    public void createPotionAndStartThread() {
+        Potion potion = new Potion(getContext(), player);
+        potions.add(potion);
+        potionUpdaterPool.submit(potion::run);
+    }
+
+
 
     /**
      * Send a POST request and create a score record in database

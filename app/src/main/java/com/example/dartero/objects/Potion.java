@@ -3,47 +3,40 @@ package com.example.dartero.objects;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 
 import androidx.core.content.ContextCompat;
 
 import com.example.dartero.R;
 
-public class Potion extends GameObject implements Runnable {
+public class Potion extends GameObject{
 
-    private Context context;
-    private WindowManager windowManager;
-    private DisplayMetrics displayMetrics;
-    private int screenWidth;
-    private int screenHeight;
+
     private Paint paint;
 
-    private Canvas canvas;
-
+    public static final double radius = 60;
     private Player player;
 
     private boolean consumed;
-    private Thread thread;
-    private boolean running = false;
 
-    public Potion(Context context, Canvas canvas,double positionX, double positionY, Player player) {
-        super(positionX,positionY,60);
-        this.context = context;
-        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        displayMetrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        this.canvas = canvas;
-        screenWidth = displayMetrics.widthPixels;
-        screenHeight = displayMetrics.heightPixels;
+    public Potion(Context context, Player player) {
+        super(Math.random() * 1000, Math.random() * 1000,radius);
         paint = new Paint();
         paint.setColor(ContextCompat.getColor(context, R.color.potion));
         this.consumed = false;
         this.player = player;
     }
 
-    private boolean isConsumed() {
+    public Potion(Context context, double positionX, double positionY, Player player) {
+        super(positionX, positionY,radius);
+        paint = new Paint();
+        paint.setColor(ContextCompat.getColor(context, R.color.potion));
+        this.consumed = false;
+        this.player = player;
+    }
+
+
+    public boolean isConsumed() {
         return consumed;
     }
 
@@ -56,14 +49,16 @@ public class Potion extends GameObject implements Runnable {
         }
     }
 
-    @Override
     public void run() {
         long startTime = System.currentTimeMillis();
 
         while (!isConsumed() && System.currentTimeMillis() - startTime < 10000) {
             //wait
+            Log.d("Potion", "try consume");
             tryConsume();
         }
+
+        this.consumed = true;
     }
 
     @Override
