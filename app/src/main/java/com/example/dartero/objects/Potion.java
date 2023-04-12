@@ -3,7 +3,6 @@ package com.example.dartero.objects;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
@@ -42,7 +41,6 @@ public class Potion extends GameObject{
 
     private void tryConsume() {
         if (GameObject.isColliding(this,player)) {
-            Log.d("Potion", "consumed");
 
             this.consumed = true;
             player.setHealthPoints(player.getHealthPoints()+1);
@@ -54,7 +52,6 @@ public class Potion extends GameObject{
 
         while (!isConsumed() && System.currentTimeMillis() - startTime < 10000) {
             //wait
-            Log.d("Potion", "try consume");
             tryConsume();
         }
 

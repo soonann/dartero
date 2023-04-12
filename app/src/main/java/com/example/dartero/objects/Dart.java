@@ -6,7 +6,6 @@ import android.graphics.Paint;
 
 import androidx.core.content.ContextCompat;
 
-import com.example.dartero.GameLoop;
 import com.example.dartero.R;
 
 import java.util.List;
@@ -31,14 +30,14 @@ public class Dart extends GameObject {
     public Dart(Context context) {
         super(player.positionX,player.positionY,radius);
         paint = new Paint();
-        this.mobs = mobs;
-        this.player = player;
         // Find the nearestMob on initialization of the dart
         Mob nearestMob = mobs.get(0);
         //Minimum distance between mob and dart
         Double minDistBetMobAndDart = GameObject.getDistBetweenGameObjects(this, nearestMob);
+
+
         for (Mob mob: mobs) {
-            Double distBetMobAndDart = GameObject.getDistBetweenGameObjects(this, nearestMob);
+            Double distBetMobAndDart = GameObject.getDistBetweenGameObjects(this, mob);
             if (distBetMobAndDart < minDistBetMobAndDart) {
                 nearestMob = mob;
                 minDistBetMobAndDart = distBetMobAndDart;
