@@ -176,10 +176,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             for (Dart dart : darts) {
                 dart.draw(canvas);
             }
-        }
-
-        for (Potion potion: potions) {
-            potion.draw(canvas);
+            for (Potion potion: potions) {
+                potion.draw(canvas);
+            }
         }
 
         // game over if player is dead
@@ -383,7 +382,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             gameLoop.resumeGame();
         }
 
-        if(pause.quitButton.isPressed(event.getX(), event.getY())){
+        if(isPaused && pause.quitButton.isPressed(event.getX(), event.getY())){
+            isPaused = false;
             quitGame();
         }
 
