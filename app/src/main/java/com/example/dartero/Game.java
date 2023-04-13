@@ -137,6 +137,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
      * Allow reset of game when gameover
      */
     public void resetGame() {
+        isPaused = false;
         gameLoop.resumeGame();
         initGame();
     }
@@ -391,6 +392,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Restart button for restarting the game
         if (player.getHealthPoints() <= 0 && event.getActionMasked() == MotionEvent.ACTION_UP) {
             if (gameOver.handleTouchEvent(event.getX(), event.getY())) {
+                isPaused = false;
                 resetGame();
             }
             return true;
