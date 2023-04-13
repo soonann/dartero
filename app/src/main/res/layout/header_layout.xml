@@ -9,13 +9,15 @@
         android:layout_width="264dp"
         android:layout_height="wrap_content"
         android:text="Player Name"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/header"/>
 
     <TextView
         android:layout_width="116dp"
         android:layout_height="wrap_content"
         android:text="Player Score"
         android:paddingStart="16dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/header"/>
 
 </LinearLayout>
