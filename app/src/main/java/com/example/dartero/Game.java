@@ -130,6 +130,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             shootSound.release();
             shootSound = null;
         }
+
+        if (vibrator != null) {
+            vibrator.cancel();
+            vibrator = null;
+        }
+        
         Intent intent = new Intent(getContext(), MainActivity.class);
         getContext().startActivity(intent);
         ((Activity)getContext()).finish();
