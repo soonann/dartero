@@ -125,6 +125,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void quitGame() {
+        if (shootSound != null) {
+            shootSound.stop();
+            shootSound.release();
+            shootSound = null;
+        }
         Intent intent = new Intent(getContext(), MainActivity.class);
         getContext().startActivity(intent);
         ((Activity)getContext()).finish();
