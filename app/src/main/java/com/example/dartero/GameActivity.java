@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public class GameActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
+    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,8 @@ public class GameActivity extends AppCompatActivity {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
-        setContentView(new Game(this));
+        this.game = new Game(this);
+        setContentView(game);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.kirby);
 
@@ -57,5 +59,10 @@ public class GameActivity extends AppCompatActivity {
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
             mediaPlayer.start();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        game.quitGame();
     }
 }
