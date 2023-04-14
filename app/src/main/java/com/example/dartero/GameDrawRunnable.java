@@ -81,13 +81,6 @@ public class GameDrawRunnable implements Runnable {
         Canvas canvas = null;
         startTime = System.currentTimeMillis();
         while (running) {
-            while(paused && thread != null){
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
             try {
                 canvas = surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder) {
