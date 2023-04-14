@@ -1,5 +1,6 @@
 package com.example.dartero;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -124,9 +125,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void quitGame() {
-
         Intent intent = new Intent(getContext(), MainActivity.class);
         getContext().startActivity(intent);
+        ((Activity)getContext()).finish();
     }
     public void resumeGame(){
         gameLoop.resumeGame();
