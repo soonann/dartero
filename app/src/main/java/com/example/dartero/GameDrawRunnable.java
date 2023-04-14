@@ -12,6 +12,8 @@ public class GameDrawRunnable implements Runnable {
     private Game game;
     private SurfaceHolder surfaceHolder;
     private boolean running = false;
+
+    private boolean paused = false;
     private Thread thread;
 
     private double averageFPS;
@@ -55,6 +57,12 @@ public class GameDrawRunnable implements Runnable {
             e.printStackTrace();
         }
     }
+    public void pause() {
+        paused = true;
+    }
+    public void resume() {
+        paused = false;
+    }
 
     /**
      * Returns the current average frames per second
@@ -75,19 +83,21 @@ public class GameDrawRunnable implements Runnable {
         while (running) {
             try {
                 canvas = surfaceHolder.lockCanvas();
-                synchronized (surfaceHolder) {
-                    game.draw(canvas);
+                if (canvas != null) { // check if the Canvas object is null before using it to draw
+                    synchronized (surfaceHolder) {
+                        game.draw(canvas);
 
-                    // Calculate and draw FPS
-                    elapsedTime = System.currentTimeMillis() - startTime;
-                    if (elapsedTime >= 1000) {
-                        averageFPS = frameCount / (1E-3 * elapsedTime);
-                        frameCount = 0;
-                        startTime = System.currentTimeMillis();
+                        // Calculate and draw FPS
+                        elapsedTime = System.currentTimeMillis() - startTime;
+                        if (elapsedTime >= 1000) {
+                            averageFPS = frameCount / (1E-3 * elapsedTime);
+                            frameCount = 0;
+                            startTime = System.currentTimeMillis();
+                        }
+                        frameCount++;
+
+                        game.drawFPS(canvas, averageFPS); // Pass the averageFPS to the drawFPS method
                     }
-                    frameCount++;
-
-                    game.drawFPS(canvas, averageFPS); // Pass the averageFPS to the drawFPS method
                 }
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();

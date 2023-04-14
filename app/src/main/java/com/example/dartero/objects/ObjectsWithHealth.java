@@ -5,16 +5,20 @@ public abstract class ObjectsWithHealth extends GameObject{
 
 
     public int maxHealthPoints;
-    public int healthPoints;
+    public volatile int healthPoints;
 
     public int getHealthPoints() {
         return healthPoints;
     }
 
-    public void setHealthPoints(int healthPoints) {
+    public synchronized void setHealthPoints(int healthPoints) {
         if (healthPoints >= 0) {
             this.healthPoints = healthPoints;
         }
+        if (healthPoints > maxHealthPoints) {
+            this.healthPoints = maxHealthPoints;
+        }
+
     }
     public int getMaxHealthPoints() {
         return maxHealthPoints;
@@ -23,6 +27,7 @@ public abstract class ObjectsWithHealth extends GameObject{
     public void setMaxHealthPoints(int maxHealthPoints) {
         this.maxHealthPoints = maxHealthPoints;
     }
+
 
 
     public ObjectsWithHealth(double positionX, double positionY, double radius, int healthPoints) {

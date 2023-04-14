@@ -8,10 +8,12 @@ public class GameLoop extends Thread{
 
 //    private Game game;
 //    private SurfaceHolder surfaceHolder;
-
+    private boolean isRunning;
+    private boolean isPaused = false;
 
     private GameUpdateRunnable updateThread;
     private GameDrawRunnable drawThread;
+//    private boolean isPaused;
 
     public GameLoop(Game game, SurfaceHolder surfaceHolder) {
 //        this.game = game;
@@ -26,6 +28,7 @@ public class GameLoop extends Thread{
 
     @Override
     public void run() {
+        isRunning = true;
         super.run();
 
         // Start rendering the screen
@@ -34,6 +37,19 @@ public class GameLoop extends Thread{
         // Start the update thread
         updateThread.start();
 
+        while (isRunning) {
+            if (isPaused) {
+                synchronized (this) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+
         drawThread.join();
         drawThread.stop();
 
@@ -41,6 +57,22 @@ public class GameLoop extends Thread{
         updateThread.join();
         updateThread.stop();
     }
+
+    public void pauseGame() {
+        isPaused = true;
+        updateThread.pause();
+        drawThread.pause();
+    }
+
+    public void resumeGame() {
+        isPaused = false;
+        updateThread.resume();
+        drawThread.resume();
+        synchronized (this) {
+            notify();
+        }
+    }
+
 
     public void stopLoop() {
         Log.d("GameLoop.java", "stopLoop()");

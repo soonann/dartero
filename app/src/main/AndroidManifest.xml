@@ -4,13 +4,12 @@
 
     <application
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dartero"
-        tools:targetApi="31">
+        tools:targetApi="30">
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -24,5 +23,5 @@
         <activity android:name=".ScoreboardActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.VIBRATE"/>
 </manifest>

@@ -17,4 +17,7 @@
     <color name="btn">#C5C5C5</color>
     <color name="Score">#FFFFFFFF</color>
     <color name="btn_disabled">#584D6C</color>
+    <color name="potion">#CF59BC</color>
+    <color name="flash">#F3AFE8</color>
+    <color name="header">#838383</color>
 </resources>
